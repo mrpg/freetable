@@ -1,5 +1,7 @@
 # freetable
 
+![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+
 Convert statsmodels regression results to publication-ready LaTeX tables. This package is highly opinionated and seeks to do *exactly one thing well*.
 
 Moreover, unlike many similar packages, this one is completely free to use and imposes no requirements on users [(read more here about problems with other packages)](https://blog.max.pm/r_not_yours/).
