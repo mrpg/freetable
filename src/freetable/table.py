@@ -2,6 +2,8 @@
 
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
+from freetable.config import config
+
 
 def table(
     models: Union[Any, List[Any]],
@@ -73,6 +75,14 @@ def table(
         Standard errors are shown in parentheses below coefficients.
         The Intercept parameter is renamed to "(Intercept)" in the output.
 
+        Configurable labels: You can customize labels globally using the config object:
+            >>> import freetable
+            >>> freetable.config.rsquared_label = "R-squared"
+            >>> freetable.config.nobs_label = "N"
+            >>> freetable.config.model_prefix = "Model "
+            >>> freetable.config.intercept_label = "Constant"
+            >>> freetable.config.adj_rsquared_label = r"Adj. R$^2$"
+
         LaTeX special characters: This function does NOT escape special LaTeX
         characters in user inputs (caption, label, rename values, etc.). This
         is intentional - users can include LaTeX commands if desired. If your
@@ -83,7 +93,7 @@ def table(
         models = [models]
 
     if model_names is None:
-        model_names = [f"Model {i+1}" for i in range(len(models))]
+        model_names = [f"{config.model_prefix}{i+1}" for i in range(len(models))]
 
     if rename is None:
         rename = {}
@@ -153,7 +163,7 @@ def table(
 
         # Apply renaming: first handle Intercept, then check rename dict
         if param == "Intercept":
-            param_name = "(Intercept)"
+            param_name = config.intercept_label
         else:
             param_name = rename.get(param, param)
 
@@ -179,15 +189,19 @@ def table(
     # Build statistics rows
     stats_rows = []
     stats_rows.append(
-        r"R$^2$ & " + " & ".join([f"{m.rsquared:.{digits}f}" for m in models]) + r" \\"
+        f"{config.rsquared_label} & "
+        + " & ".join([f"{m.rsquared:.{digits}f}" for m in models])
+        + r" \\"
     )
     stats_rows.append(
-        r"Adj. R$^2$ & "
+        f"{config.adj_rsquared_label} & "
         + " & ".join([f"{m.rsquared_adj:.{digits}f}" for m in models])
         + r" \\"
     )
     stats_rows.append(
-        "Num. obs. & " + " & ".join([f"{{{int(m.nobs)}}}" for m in models]) + r" \\"
+        f"{config.nobs_label} & "
+        + " & ".join([f"{{{int(m.nobs)}}}" for m in models])
+        + r" \\"
     )
 
     # Add extra custom rows if provided

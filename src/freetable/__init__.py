@@ -8,8 +8,9 @@ Requirements:
     - LaTeX packages: threeparttable, siunitx, booktabs
 """
 
+from freetable.config import config
 from freetable.table import table
 
 __version__ = "1.0.0"
 __author__ = "Max R. P. Grossmann"
-__all__ = ["table"]
+__all__ = ["table", "config"]
