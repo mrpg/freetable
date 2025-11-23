@@ -1,0 +1,138 @@
+# freetable
+
+Convert statsmodels regression results to publication-ready LaTeX tables. This package is highly opinionated and seeks to do *exactly one thing well*.
+
+Moreover, unlike many similar packages, this one is completely free to use and imposes no requirements on users [(read more here about problems with other packages)](https://blog.max.pm/r_not_yours/).
+
+## Installation
+
+```bash
+pip install -U git+https://github.com/mrpg/freetable.git@master
+```
+
+## Features
+
+- Clean, opinionated output using modern LaTeX packages
+- Automatic significance stars (default: *** p<0.001; ** p<0.01; * p<0.05)
+- Customizable significance thresholds
+- Variable renaming for clean presentation
+- Standard errors in parentheses below coefficients
+- R², adjusted R², and number of observations
+- Extra custom rows (e.g., outcome labels, SE types, subsets)
+- Grouped column headers with multicolumn support
+- Customizable table placement
+- Optional automatic resizing for wide tables
+- Professional formatting with booktabs, siunitx, and threeparttable
+
+## Requirements
+
+**Python:**
+- statsmodels
+
+**LaTeX packages:**
+- threeparttable
+- siunitx
+- booktabs
+- graphicx (only required if using `resize=True`)
+
+Add these to your LaTeX document preamble:
+
+```latex
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{threeparttable}
+\usepackage{graphicx}  % Only needed for resize=True
+```
+
+Or just use [paper](https://github.com/mrpg/paper)!
+
+## Usage
+
+### Basic example
+
+```python
+import pandas as pd
+import statsmodels.formula.api as smf
+from freetable import table
+
+# Fit your models
+df = pd.read_csv("data.csv")
+m1 = smf.ols("y ~ x1", data=df).fit()
+m2 = smf.ols("y ~ x1 + x2", data=df).fit()
+
+# Generate LaTeX table
+latex = table(
+    [m1, m2],
+    model_names=["Model 1", "Model 2"],
+    caption="Regression Results",
+    label="tab:regression",
+    digits=3,
+    rename={"x1": "Gender", "x2": "Age"},
+    stars=(0.1, 0.05, 0.01),  # Order doesn't matter - automatically sorted
+)
+
+print(latex)
+```
+
+### Advanced example with all features
+
+```python
+# Fit three models
+m1 = smf.ols("outcome ~ treatment", data=df).fit()
+m2 = smf.ols("outcome ~ treatment + control1", data=df).fit()
+m3 = smf.ols("outcome ~ treatment + control1 + control2", data=df).fit()
+
+# Create comprehensive table
+latex = table(
+    [m1, m2, m3],
+    model_names=["Model 1", "Model 2", "Model 3"],
+    caption="Treatment Effects on Outcomes",
+    label="tab:treatment",
+    digits=3,
+    rename={"treatment": "Treatment", "control1": "Control 1", "control2": "Control 2"},
+    extra_rows={
+        "Outcome": ["Y", "Y", "Y"],
+        "Subset": ["All", "All", "All"],
+        "SE type": ["HC3", "HC3", "Clustered"]
+    },
+    custom_header=[("Main Effects", 2), ("Full Model", 1)],
+    placement="h!",
+    resize=True,
+)
+
+print(latex)
+```
+
+## Development
+
+This package uses the following tools for code quality and consistency:
+
+- **black**: Code formatting
+- **ruff**: Fast Python linting
+- **isort**: Import sorting
+- **mypy**: Static type checking
+- **pytest**: Testing framework
+
+### Running tests
+
+Install development dependencies:
+
+```bash
+pip install -Ue ".[dev]"
+```
+
+Run tests:
+
+```bash
+pytest
+```
+
+Run type checking:
+
+```bash
+mypy src/freetable/
+```
+
+## License
+
+Everything in this repository is licensed under [CC0 1.0 Universal](https://creativecommons.org/publicdomain/zero/1.0/), or (at your option) any later version. See `LICENSE` for details. Note that there is **absolutely no warranty**.
