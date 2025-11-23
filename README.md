@@ -6,6 +6,8 @@ Convert statsmodels regression results to publication-ready LaTeX tables. This p
 
 Moreover, unlike many similar packages, this one is completely free to use and imposes no requirements on users [(read more here about problems with other packages)](https://blog.max.pm/r_not_yours/).
 
+<img src="example.png" alt="Example regression table output" width="500">
+
 ## Installation
 
 ```bash
@@ -80,9 +82,12 @@ print(latex)
 
 ```python
 # Fit three models
-m1 = smf.ols("outcome ~ treatment", data=df).fit()
-m2 = smf.ols("outcome ~ treatment + control1", data=df).fit()
-m3 = smf.ols("outcome ~ treatment + control1 + control2", data=df).fit()
+m1 = smf.ols("outcome ~ treatment", data=df).fit(cov_type="HC3")
+m2 = smf.ols("outcome ~ treatment + control1", data=df).fit(cov_type="HC3")
+m3 = smf.ols("outcome ~ treatment + control1 + control2", data=df).fit(
+    cov_type="cluster",
+    cov_kwds={"groups": df["cluster_id"]},
+)
 
 # Create comprehensive table
 latex = table(
@@ -95,7 +100,7 @@ latex = table(
     extra_rows={
         "Outcome": ["Y", "Y", "Y"],
         "Subset": ["All", "All", "All"],
-        "SE type": ["HC3", "HC3", "Clustered"]
+        "SE type": ["HC3", "HC3", "Clustered"],
     },
     custom_header=[("Main Effects", 2), ("Full Model", 1)],
     placement="h!",
