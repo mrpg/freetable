@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "freetable"
-version = "0.0.1"
+version = "1.0.0"
 description = "Convert statsmodels results to publication-ready LaTeX tables"
 readme = "README.md"
 license = "CC0-1.0"
@@ -16,7 +16,7 @@ dependencies = [
     "statsmodels",
 ]
 classifiers = [
-    "Development Status :: 4 - Beta",
+    "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
     "License :: CC0 1.0 Universal (CC0 1.0) Public Domain Dedication",
     "Programming Language :: Python :: 3",
