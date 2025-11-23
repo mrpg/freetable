@@ -62,9 +62,9 @@ def test_basic_table(model1, latex_outputs):
     # Check content
     assert "(Intercept)" in result
     assert "x1" in result
-    assert r"R$^2$" in result
-    assert r"Adj. R$^2$" in result
-    assert "Num. obs." in result
+    assert r"$R^2$" in result
+    assert r"Adj. $R^2$" in result
+    assert "Observations" in result
 
     # Check significance stars
     assert r"$^{***}p<0.001$" in result
