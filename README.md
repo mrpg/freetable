@@ -9,7 +9,7 @@ Moreover, unlike many similar packages, this one is completely free to use and i
 ## Installation
 
 ```bash
-pip install -U git+https://github.com/mrpg/freetable.git@master
+pip install -U freetable
 ```
 
 ## Features
