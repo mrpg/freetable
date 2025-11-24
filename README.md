@@ -61,8 +61,9 @@ import pandas as pd
 import statsmodels.formula.api as smf
 from freetable import table
 
+df = pd.read_csv("output.csv")
+
 # Fit your models
-df = pd.read_csv("data.csv")
 m1 = smf.ols("y ~ x1", data=df).fit()
 m2 = smf.ols("y ~ x1 + x2", data=df).fit()
 
@@ -83,6 +84,12 @@ print(latex)
 ### Advanced example with all features
 
 ```python
+import pandas as pd
+import statsmodels.formula.api as smf
+from freetable import table
+
+df = pd.read_csv("data.csv")
+
 # Fit three models
 m1 = smf.ols("outcome ~ treatment", data=df).fit(cov_type="HC3")
 m2 = smf.ols("outcome ~ treatment + control1", data=df).fit(cov_type="HC3")
@@ -106,7 +113,7 @@ latex = table(
     },
     custom_header=[("Main Effects", 2), ("Full Model", 1)],
     placement="h!",
-    resize=True,
+    resize=False,
 )
 
 print(latex)
