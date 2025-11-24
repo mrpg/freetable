@@ -22,7 +22,7 @@ def table(
 
     Creates a publication-ready LaTeX table with coefficients, standard errors,
     significance stars, and model statistics. Uses threeparttable, siunitx,
-    and booktabs for professional formatting.
+    booktabs, and tabularx for professional formatting.
 
     Args:
         models: A single statsmodels result object or a list of results.
@@ -128,21 +128,24 @@ def table(
 
         # Build multicolumn header row
         header_parts = []
-        for group_label, span in custom_header:
+        for i, (group_label, span) in enumerate(custom_header):
             if span == 1:
                 header_parts.append(f"{{{group_label}}}")
             else:
+                # Use "c @{}" for all multicolumns
                 header_parts.append(
-                    f"\\multicolumn{{{span}}}{{c}}{{{{{group_label}}}}}"
+                    f"\\multicolumn{{{span}}}{{c @{{}}}}{{{{{group_label}}}}}"
                 )
         multicolumn_header = " & ".join(header_parts)
 
         # Build cmidrule commands
         cmidrules = []
         col_start = 2  # Start at column 2 (column 1 is for variable names)
-        for _, span in custom_header:
+        for i, (_, span) in enumerate(custom_header):
             col_end = col_start + span - 1
-            cmidrules.append(f"\\cmidrule(lr){{{col_start}-{col_end}}}")
+            # Use (l) for last cmidrule, (lr) for others
+            trim = "(l)" if i == len(custom_header) - 1 else "(lr)"
+            cmidrules.append(f"\\cmidrule{trim}{{{col_start}-{col_end}}}")
             col_start = col_end + 1
         cmidrule_line = " ".join(cmidrules)
 
@@ -150,7 +153,9 @@ def table(
         model_names_row = " & ".join(["{" + name + "}" for name in model_names])
 
         # Combine into header structure (don't add leading & since it's added in LaTeX assembly)
-        header = f"{multicolumn_header} \\\\\n{cmidrule_line}\n & {model_names_row}"
+        header = (
+            f"{multicolumn_header} \\\\  % !\n{cmidrule_line}\n & {model_names_row}"
+        )
     else:
         # Simple header without grouping
         header = " & ".join(["{" + name + "}" for name in model_names])
@@ -218,8 +223,13 @@ def table(
                 + r" \\"
             )
 
-    # Define column format for siunitx
-    col_format = "l" + " S[table-format=3.6]" * len(models)
+    # Define column format for tabularx with siunitx
+    # X for first column, then S columns with custom width for each model
+    num_models = len(models)
+    s_cols = (
+        f"*{{{num_models}}}{{S[table-format = 3.5, table-column-width = \\mylength]}}"
+    )
+    col_format = f"@{{}} X {s_cols} @{{}}"
 
     # Build significance note based on sorted thresholds
     star_notes = []
@@ -232,19 +242,22 @@ def table(
     rows_str = "\n".join(rows)
     stats_str = "\n".join(stats_rows)
 
-    # Build tabular content
+    # Build tabularx content
     if resize:
-        tabular_open = rf"\resizebox{{\textwidth}}{{!}}{{%{chr(10)}\begin{{tabular}}{{{col_format}}}"
-        tabular_close = r"\end{tabular}}"
+        tabularx_open = rf"\resizebox{{\textwidth}}{{!}}{{%{chr(10)}\begin{{tabularx}}{{\textwidth}}{{{col_format}}}  % !"
+        tabularx_close = r"\end{tabularx}}"
     else:
-        tabular_open = rf"\begin{{tabular}}{{{col_format}}}"
-        tabular_close = r"\end{tabular}"
+        tabularx_open = rf"\begin{{tabularx}}{{\textwidth}}{{{col_format}}}  % !"
+        tabularx_close = r"\end{tabularx}"
 
     latex = rf"""\begin{{table}}[{placement}]
-\centering
-\sisetup{{parse-numbers=false, table-text-alignment=center}}
+\caption{{{caption}}}
+\label{{{label}}}
+\sisetup{{parse-numbers=false}}
+\newlength{{\mylength}}
+\setlength{{\mylength}}{{0.175\textwidth}}
 \begin{{threeparttable}}
-{tabular_open}
+{tabularx_open}
 \toprule
  & {header} \\
 \midrule
@@ -252,13 +265,11 @@ def table(
 \midrule
 {stats_str}
 \bottomrule
-{tabular_close}
+{tabularx_close}
 \begin{{tablenotes}}[flushleft]
-\scriptsize{{\item {significance_note}}}
+{{\item {significance_note}}}
 \end{{tablenotes}}
 \end{{threeparttable}}
-\caption{{{caption}}}
-\label{{{label}}}
 \end{{table}}"""
 
     return latex

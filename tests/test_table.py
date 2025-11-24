@@ -53,14 +53,14 @@ def test_basic_table(model1, latex_outputs):
     # Check structure
     assert r"\begin{table}[htbp]" in result
     assert r"\begin{threeparttable}" in result
-    assert r"\begin{tabular}" in result
+    assert r"\begin{tabularx}" in result
     assert r"\toprule" in result
     assert r"\midrule" in result
     assert r"\bottomrule" in result
     assert r"\end{table}" in result
 
     # Check content
-    assert "(Intercept)" in result
+    assert "Intercept" in result
     assert "x1" in result
     assert r"$R^2$" in result
     assert r"Adj. $R^2$" in result
@@ -172,7 +172,7 @@ def test_custom_header(model1, model2):
     assert "{Group A}" in result
     assert "{Group B}" in result
     assert r"\cmidrule(lr){2-2}" in result
-    assert r"\cmidrule(lr){3-3}" in result
+    assert r"\cmidrule(l){3-3}" in result
 
 
 def test_custom_header_multicolumn(model1, model2, latex_outputs):
@@ -183,8 +183,8 @@ def test_custom_header_multicolumn(model1, model2, latex_outputs):
         table([model1, model2], custom_header=[("Both Models", 2)]),
     )
 
-    assert r"\multicolumn{2}{c}{{Both Models}}" in result
-    assert r"\cmidrule(lr){2-3}" in result
+    assert r"\multicolumn{2}{c @{}}{{Both Models}}" in result
+    assert r"\cmidrule(l){2-3}" in result
 
 
 def test_custom_header_wrong_span(model1, model2):
@@ -206,7 +206,7 @@ def test_resize_false(model1):
     result = table(model1, resize=False)
 
     assert r"\resizebox" not in result
-    assert r"\begin{tabular}" in result
+    assert r"\begin{tabularx}" in result
 
 
 def test_resize_true(model1, latex_outputs):
@@ -214,7 +214,7 @@ def test_resize_true(model1, latex_outputs):
     result = collect_latex(latex_outputs, "Resize Table", table(model1, resize=True))
 
     assert r"\resizebox{\textwidth}{!}{%" in result
-    assert r"\end{tabular}}" in result
+    assert r"\end{tabularx}}" in result
 
 
 def test_no_stars_for_nonsignificant(df):
@@ -262,7 +262,7 @@ def test_combined_features(model1, model2, latex_outputs):
     assert "Variable X" in result
     assert r"$^{***}p<0.01$" in result
     assert "Type & {OLS} & {OLS}" in result
-    assert r"\multicolumn{2}{c}{{Group}}" in result
+    assert r"\multicolumn{2}{c @{}}{{Group}}" in result
     assert r"\begin{table}[h!]" in result
     assert r"\resizebox" in result
 
@@ -278,18 +278,18 @@ def test_single_model_as_list(model1):
 
 
 def test_intercept_renamed(model1):
-    """Test that Intercept is renamed to (Intercept)."""
+    """Test that Intercept is shown with default label."""
     result = table(model1)
 
-    assert "(Intercept)" in result
-    # Should not appear as "Intercept" in row label position
+    assert "Intercept" in result
+    # Should appear as "Intercept" in row label position
     lines = result.split("\n")
     for line in lines:
-        if line.strip().startswith("(Intercept)"):
+        if line.strip().startswith("Intercept"):
             assert True
             break
     else:
-        pytest.fail("(Intercept) not found as row label")
+        pytest.fail("Intercept not found as row label")
 
 
 def test_zzz_write_latex_compilation_file(latex_outputs):
@@ -304,6 +304,7 @@ def test_zzz_write_latex_compilation_file(latex_outputs):
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{threeparttable}
+\usepackage{tabularx}
 \usepackage{graphicx}
 \usepackage[margin=1in]{geometry}
 

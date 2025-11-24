@@ -37,6 +37,7 @@ pip install -U freetable
 - threeparttable
 - siunitx
 - booktabs
+- tabularx
 - graphicx (only required if using `resize=True`)
 
 Add these to your LaTeX document preamble:
@@ -45,6 +46,7 @@ Add these to your LaTeX document preamble:
 \usepackage{booktabs}
 \usepackage{siunitx}
 \usepackage{threeparttable}
+\usepackage{tabularx}
 \usepackage{graphicx}  % Only needed for resize=True
 ```
 

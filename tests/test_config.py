@@ -48,7 +48,7 @@ def test_config_default_values():
     assert config.rsquared_label == r"$R^2$"
     assert config.adj_rsquared_label == r"Adj. $R^2$"
     assert config.nobs_label == "Observations"
-    assert config.intercept_label == "(Intercept)"
+    assert config.intercept_label == "Intercept"
 
 
 def test_config_accessible_from_freetable():
@@ -190,4 +190,4 @@ def test_config_class_instantiation():
     assert new_config.rsquared_label == r"$R^2$"
     assert new_config.adj_rsquared_label == r"Adj. $R^2$"
     assert new_config.nobs_label == "Observations"
-    assert new_config.intercept_label == "(Intercept)"
+    assert new_config.intercept_label == "Intercept"
