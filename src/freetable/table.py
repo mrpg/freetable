@@ -226,9 +226,7 @@ def table(
     # Define column format for tabularx with siunitx
     # X for first column, then S columns with custom width for each model
     num_models = len(models)
-    s_cols = (
-        f"*{{{num_models}}}{{S[table-format = 3.5, table-column-width = \\mylength]}}"
-    )
+    s_cols = f"*{{{num_models}}}{{S[table-format = 3.5, table-column-width = 0.175\\textwidth]}}"
     col_format = f"@{{}} X {s_cols} @{{}}"
 
     # Build significance note based on sorted thresholds
@@ -254,8 +252,6 @@ def table(
 \caption{{{caption}}}
 \label{{{label}}}
 \sisetup{{parse-numbers=false}}
-\newlength{{\mylength}}
-\setlength{{\mylength}}{{0.175\textwidth}}
 \begin{{threeparttable}}
 {tabularx_open}
 \toprule
