@@ -1,0 +1,72 @@
+% !TeX spellcheck = en_US
+\documentclass[a4paper,11pt]{article}
+
+\usepackage{booktabs}
+\usepackage{siunitx}
+\usepackage{threeparttable}
+\usepackage{tabularx}
+
+\begin{document}
+
+\begin{table}[htbp]
+\caption{Regression Results}
+\label{tab:regression}
+\sisetup{parse-numbers=false}
+\begin{threeparttable}
+\begin{tabularx}{\textwidth}{@{} X *{2}{S[table-format = 3.5, table-column-width = 0.175\textwidth]} @{}}  % !
+\toprule
+ & {Model 1} & {Model 2} \\
+\midrule
+Intercept & 94.481^{***} & -4.861 \\
+ & (11.079) & (22.148) \\
+x1[T.Male] & 31.561^{*} & 32.155^{**} \\
+ & (15.991) & (14.323) \\
+Age &  & 3.462^{***} \\
+ &  & (0.690) \\
+\midrule
+$R^2$ & 0.038 & 0.236 \\
+Adj. $R^2$ & 0.028 & 0.221 \\
+Observations & {100} & {100} \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+{\item $^{***}p<0.01$; $^{**}p<0.05$; $^{*}p<0.1$}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\begin{table}[h!]
+\caption{Treatment Effects on Outcomes}
+\label{tab:treatment}
+\sisetup{parse-numbers=false}
+\begin{threeparttable}
+\begin{tabularx}{\textwidth}{@{} X *{3}{S[table-format = 3.5, table-column-width = 0.175\textwidth]} @{}}  % !
+\toprule
+ & \multicolumn{2}{c @{}}{{Main Effects}} & {Full Model} \\  % !
+\cmidrule(lr){2-3} \cmidrule(l){4-4}
+ & {Model 1} & {Model 2} & {Model 3} \\
+\midrule
+Intercept & 11.190^{***} & 10.489^{***} & -1.773^{***} \\
+ & (1.918) & (1.768) & (0.137) \\
+Control 1 &  & -5.276^{***} & -3.090^{***} \\
+ &  & (1.125) & (0.102) \\
+Control 2 &  &  & 9.853^{***} \\
+ &  &  & (0.064) \\
+Treatment & -2.696 & -1.415 & 0.865^{***} \\
+ & (2.483) & (2.245) & (0.179) \\
+\midrule
+$R^2$ & 0.012 & 0.197 & 0.995 \\
+Adj. $R^2$ & 0.002 & 0.181 & 0.995 \\
+Observations & {100} & {100} & {100} \\
+Outcome & {Y} & {Y} & {Y} \\
+Subset & {All} & {All} & {All} \\
+SE type & {HC3} & {HC3} & {Clustered} \\
+\bottomrule
+\end{tabularx}
+\begin{tablenotes}[flushleft]
+{\item $^{***}p<0.001$; $^{**}p<0.01$; $^{*}p<0.05$}
+\end{tablenotes}
+\end{threeparttable}
+\end{table}
+
+\end{document}
