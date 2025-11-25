@@ -1,7 +1,8 @@
-"""Table generation for statsmodels regression results."""
+"""Table generation for statsmodels and pyfixest regression results."""
 
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Union
 
+from freetable.adapter import adapt_model
 from freetable.config import config
 
 
@@ -18,14 +19,17 @@ def table(
     placement: str = "htbp",
     resize: bool = False,
 ) -> str:
-    """Convert statsmodels regression results to a LaTeX table.
+    """Convert regression results (statsmodels or pyfixest) to a LaTeX table.
 
     Creates a publication-ready LaTeX table with coefficients, standard errors,
     significance stars, and model statistics. Uses threeparttable, siunitx,
     booktabs, and tabularx for professional formatting.
 
+    Supports regression results from statsmodels and pyfixest.
+
     Args:
-        models: A single statsmodels result object or a list of results.
+        models: A single regression result object or a list of results.
+               Supports statsmodels and pyfixest (Feols) result objects.
         model_names: Optional list of names for each model column.
                     Defaults to ["Model 1", "Model 2", ...].
         digits: Number of decimal places for numerical output. Default: 3.
@@ -91,6 +95,9 @@ def table(
     """
     if not isinstance(models, list):
         models = [models]
+
+    # Adapt models to unified interface
+    models = [adapt_model(m) for m in models]
 
     if model_names is None:
         model_names = [f"{config.model_prefix}{i+1}" for i in range(len(models))]

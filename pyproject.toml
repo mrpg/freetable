@@ -5,16 +5,14 @@ build-backend = "hatchling.build"
 [project]
 name = "freetable"
 version = "2.0.0"
-description = "Convert statsmodels results to publication-ready LaTeX tables"
+description = "Convert regression results (statsmodels or pyfixest) to publication-ready LaTeX tables"
 readme = "README.md"
 license = "CC0-1.0"
 authors = [
     {name = "Max R. P. Grossmann", email = "freetable@grossmann.nexus"}
 ]
 requires-python = ">=3.8"
-dependencies = [
-    "statsmodels",
-]
+dependencies = []
 classifiers = [
     "Development Status :: 5 - Production/Stable",
     "Intended Audience :: Science/Research",
@@ -27,6 +25,16 @@ classifiers = [
 Homepage = "https://github.com/mrpg/freetable"
 
 [project.optional-dependencies]
+statsmodels = [
+    "statsmodels",
+]
+pyfixest = [
+    "pyfixest",
+]
+all = [
+    "statsmodels",
+    "pyfixest",
+]
 dev = [
     "pytest>=7.0",
     "pytest-cov>=4.0",
@@ -34,6 +42,8 @@ dev = [
     "ruff>=0.1",
     "isort>=5.0",
     "mypy>=1.0",
+    "statsmodels",
+    "pyfixest",
 ]
 
 [tool.pytest.ini_options]
