@@ -17,11 +17,11 @@ pip install -U freetable
 ## Features
 
 - Clean, opinionated output using modern LaTeX packages
-- Automatic significance stars (default: *** p<0.001; ** p<0.01; * p<0.05)
+- Automatic significance stars (default: *** *p* < 0.001; ** *p* < 0.01; * *p* < 0.05)
 - Customizable significance thresholds
 - Variable renaming for clean presentation
 - Standard errors in parentheses below coefficients
-- R², adjusted R², and number of observations
+- *R*², adjusted *R*², and number of observations
 - Extra custom rows (e.g., outcome labels, SE types, subsets)
 - Grouped column headers with multicolumn support
 - Customizable table placement
