@@ -85,7 +85,7 @@ def test_basic_pyfixest_table(pf_model1):
     assert "Intercept" in result
     assert "x1" in result
     assert r"$R^2$" in result
-    assert r"Adj. $R^2$" in result
+    assert r"Adj.\\ $R^2$" in result
     assert "Observations" in result
 
 
