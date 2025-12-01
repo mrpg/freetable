@@ -6,6 +6,11 @@
 \usepackage{threeparttable}
 \usepackage{tabularx}
 
+\usepackage{tabularray}
+\UseTblrLibrary{booktabs}
+\UseTblrLibrary{siunitx}
+\newlength{\customcolwidth}
+
 \begin{document}
 
 \begin{table}[htbp]
@@ -19,7 +24,7 @@
 \midrule
 Intercept & 94.481^{***} & -4.861 \\
  & (11.079) & (22.148) \\
-x1[T.Male] & 31.561^{*} & 32.155^{**} \\
+Male & 31.561^{*} & 32.155^{**} \\
  & (15.991) & (14.323) \\
 Age &  & 3.462^{***} \\
  &  & (0.690) \\
@@ -33,6 +38,51 @@ Observations & {100} & {100} \\
 {\item $^{***}p<0.01$; $^{**}p<0.05$; $^{*}p<0.1$}
 \end{tablenotes}
 \end{threeparttable}
+\end{table}
+
+\begin{table}[h!]
+    \sisetup{parse-numbers=false}
+    \DeclareTblrTemplate{caption-sep}{default}{: \strut}
+    \DeclareTblrTemplate{remark-sep}{default}{\strut}
+    \SetTblrStyle{remark}{font = \footnotesize, halign = j, hang = 0pt, indent = 0pt}
+    \setlength{\customcolwidth}{0.175\textwidth}
+    \begin{booktabs}[
+        caption = {Regression Results},
+        footsep = \belowbottomsep,
+        headsep = \abovetopsep,
+        label = {tab:regression},
+        long,
+        postsep = 0pt,
+        presep = 0pt,
+        remark{} = {$^{***}$\,$p < 0.01$;\: $^{**}$\,$p < 0.05$;\: $^{*}$\,$p < 0.1$.},
+    ]{
+        cell{2}{2} = {appto = {^{***}}},
+        cell{4}{2} = {appto = {^{*}}},
+        cell{4}{3} = {appto = {^{**}}},
+        cell{6}{3} = {appto = {^{***}}},
+        colspec = {X *{2}{S[table-format = 3.5, table-column-width = 0.175\textwidth]}},
+        column{1} = {leftsep = 0pt},
+        column{Z} = {rightsep = 0pt},
+        hborder{1} = {abovespace = \abovetopsep, belowspace = \belowrulesep},
+        hborder{Z} = {abovespace = \aboverulesep, belowspace = \belowbottomsep},
+        hborder{2, 8} = {abovespace = \aboverulesep, belowspace = \belowrulesep},
+        hline{1, Z} = \heavyrulewidth,
+        hline{2, 8} = \lightrulewidth,
+        row{1-1} = {guard, valign = m},
+        cell{10-10}{2-3} = {c},
+        width = \textwidth,
+    }
+         & {Model 1} & {Model 2} \\
+        {Intercept} & {94.481} & {-4.861} \\
+         & {(11.079)} & {(22.148)} \\
+        {Male} & {31.561} & {32.155} \\
+         & {(15.991)} & {(14.323)} \\
+        {Age} &  & {3.462} \\
+         &  & {(0.690)} \\
+        {$R^2$} & {0.038} & {0.236} \\
+        {Adj. $R^2$} & {0.028} & {0.221} \\
+        {Observations} & {100} & {100} \\
+    \end{booktabs}
 \end{table}
 
 \begin{table}[h!]
