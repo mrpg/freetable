@@ -6,7 +6,16 @@ from freetable.adapter import adapt_model
 from freetable.config import config
 
 
-def table(
+class TableCell:
+    """Represents a single cell in the table matrix."""
+
+    def __init__(self, content: str, has_stars: bool = False, star_str: str = ""):
+        self.content = content
+        self.has_stars = has_stars
+        self.star_str = star_str
+
+
+def tabularx(
     models: Union[Any, List[Any]],
     model_names: Optional[List[str]] = None,
     digits: int = 3,
@@ -58,12 +67,12 @@ def table(
     Example:
         >>> import statsmodels.formula.api as smf
         >>> import pandas as pd
-        >>> from freetable import table
+        >>> from freetable import tabularx
         >>>
         >>> df = pd.DataFrame({'y': [1, 2, 3, 4], 'x': [2, 4, 6, 8]})
         >>> m1 = smf.ols('y ~ x', data=df).fit()
         >>> m2 = smf.ols('y ~ x + z', data=df).fit()
-        >>> latex = table(
+        >>> latex = tabularx(
         ...     [m1, m2],
         ...     caption="My Results",
         ...     rename={"x": "Predictor"},

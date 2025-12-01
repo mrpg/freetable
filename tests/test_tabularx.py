@@ -1,4 +1,4 @@
-"""Tests for the table() function."""
+"""Tests for the tabularx() function."""
 
 from pathlib import Path
 
@@ -6,7 +6,7 @@ import pandas as pd
 import pytest
 import statsmodels.formula.api as smf
 
-from freetable import table
+from freetable import tabularx
 
 
 # Session-scoped fixture to collect all LaTeX outputs
@@ -48,7 +48,7 @@ def collect_latex(latex_outputs, test_name, latex_code):
 
 def test_basic_table(model1, latex_outputs):
     """Test basic table generation with single model."""
-    result = collect_latex(latex_outputs, "Basic Table", table(model1))
+    result = collect_latex(latex_outputs, "Basic Table", tabularx(model1))
 
     # Check structure
     assert r"\begin{table}[htbp]" in result
@@ -74,7 +74,7 @@ def test_basic_table(model1, latex_outputs):
 
 def test_multiple_models(model1, model2, latex_outputs):
     """Test table with multiple models."""
-    result = collect_latex(latex_outputs, "Multiple Models", table([model1, model2]))
+    result = collect_latex(latex_outputs, "Multiple Models", tabularx([model1, model2]))
 
     # Check both models appear
     assert "Model 1" in result
@@ -86,7 +86,7 @@ def test_multiple_models(model1, model2, latex_outputs):
 
 def test_model_names(model1, model2):
     """Test custom model names."""
-    result = table([model1, model2], model_names=["Treatment", "Control"])
+    result = tabularx([model1, model2], model_names=["Treatment", "Control"])
 
     assert "Treatment" in result
     assert "Control" in result
@@ -95,8 +95,8 @@ def test_model_names(model1, model2):
 
 def test_digits(model1):
     """Test digits parameter."""
-    result_3 = table(model1, digits=3)
-    result_2 = table(model1, digits=2)
+    result_3 = tabularx(model1, digits=3)
+    result_2 = tabularx(model1, digits=2)
 
     # Both should work but may have different precision
     assert r"\begin{table}" in result_3
@@ -105,7 +105,7 @@ def test_digits(model1):
 
 def test_caption_and_label(model1):
     """Test custom caption and label."""
-    result = table(model1, caption="My Custom Caption", label="tab:mycustom")
+    result = tabularx(model1, caption="My Custom Caption", label="tab:mycustom")
 
     assert r"\caption{My Custom Caption}" in result
     assert r"\label{tab:mycustom}" in result
@@ -116,7 +116,9 @@ def test_rename(model1, model2, latex_outputs):
     result = collect_latex(
         latex_outputs,
         "Variable Renaming",
-        table([model1, model2], rename={"x1": "Predictor One", "x2": "Predictor Two"}),
+        tabularx(
+            [model1, model2], rename={"x1": "Predictor One", "x2": "Predictor Two"}
+        ),
     )
 
     assert "Predictor One" in result
@@ -126,7 +128,7 @@ def test_rename(model1, model2, latex_outputs):
 
 def test_custom_stars(model1):
     """Test custom significance thresholds."""
-    result = table(model1, stars=(0.1, 0.05, 0.01))
+    result = tabularx(model1, stars=(0.1, 0.05, 0.01))
 
     # Check custom thresholds in note (sorted order)
     assert r"$^{***}p<0.01$" in result
@@ -136,8 +138,8 @@ def test_custom_stars(model1):
 
 def test_stars_sorting(model1):
     """Test that star thresholds are sorted correctly regardless of input order."""
-    result1 = table(model1, stars=(0.01, 0.05, 0.1))
-    result2 = table(model1, stars=(0.1, 0.05, 0.01))
+    result1 = tabularx(model1, stars=(0.01, 0.05, 0.1))
+    result2 = tabularx(model1, stars=(0.1, 0.05, 0.01))
 
     # Both should produce identical output
     assert result1 == result2
@@ -148,7 +150,7 @@ def test_extra_rows(model1, model2, latex_outputs):
     result = collect_latex(
         latex_outputs,
         "Extra Rows",
-        table(
+        tabularx(
             [model1, model2],
             extra_rows={"Outcome": ["Y", "Y"], "SE type": ["HC3", "Clustered"]},
         ),
@@ -161,12 +163,12 @@ def test_extra_rows(model1, model2, latex_outputs):
 def test_extra_rows_wrong_length(model1, model2):
     """Test that extra_rows validates length."""
     with pytest.raises(ValueError, match="has 3 values but 2 models"):
-        table([model1, model2], extra_rows={"Wrong": ["A", "B", "C"]})
+        tabularx([model1, model2], extra_rows={"Wrong": ["A", "B", "C"]})
 
 
 def test_custom_header(model1, model2):
     """Test custom grouped headers."""
-    result = table([model1, model2], custom_header=[("Group A", 1), ("Group B", 1)])
+    result = tabularx([model1, model2], custom_header=[("Group A", 1), ("Group B", 1)])
 
     # For span=1, no multicolumn is used (just braces)
     assert "{Group A}" in result
@@ -180,7 +182,7 @@ def test_custom_header_multicolumn(model1, model2, latex_outputs):
     result = collect_latex(
         latex_outputs,
         "Custom Header Multicolumn",
-        table([model1, model2], custom_header=[("Both Models", 2)]),
+        tabularx([model1, model2], custom_header=[("Both Models", 2)]),
     )
 
     assert r"\multicolumn{2}{c @{}}{{Both Models}}" in result
@@ -190,12 +192,12 @@ def test_custom_header_multicolumn(model1, model2, latex_outputs):
 def test_custom_header_wrong_span(model1, model2):
     """Test that custom_header validates span."""
     with pytest.raises(ValueError, match="spans sum to 3 but 2 models"):
-        table([model1, model2], custom_header=[("Wrong", 3)])
+        tabularx([model1, model2], custom_header=[("Wrong", 3)])
 
 
 def test_placement(model1):
     """Test custom table placement."""
-    result = table(model1, placement="h!")
+    result = tabularx(model1, placement="h!")
 
     assert r"\begin{table}[h!]" in result
     assert r"\begin{table}[htbp]" not in result
@@ -203,7 +205,7 @@ def test_placement(model1):
 
 def test_resize_false(model1):
     """Test resize=False (default)."""
-    result = table(model1, resize=False)
+    result = tabularx(model1, resize=False)
 
     assert r"\resizebox" not in result
     assert r"\begin{tabularx}" in result
@@ -211,7 +213,7 @@ def test_resize_false(model1):
 
 def test_resize_true(model1, latex_outputs):
     """Test resize=True."""
-    result = collect_latex(latex_outputs, "Resize Table", table(model1, resize=True))
+    result = collect_latex(latex_outputs, "Resize Table", tabularx(model1, resize=True))
 
     assert r"\resizebox{\textwidth}{!}{%" in result
     assert r"\end{tabularx}}" in result
@@ -228,7 +230,7 @@ def test_no_stars_for_nonsignificant(df):
         }
     )
     model = smf.ols("y ~ x + noise", data=df_nosig).fit()
-    result = table(model)
+    result = tabularx(model)
 
     # Should not have empty superscripts like ^{}
     assert "^{}" not in result
@@ -239,7 +241,7 @@ def test_combined_features(model1, model2, latex_outputs):
     result = collect_latex(
         latex_outputs,
         "All Features Combined",
-        table(
+        tabularx(
             [model1, model2],
             model_names=["Model A", "Model B"],
             digits=2,
@@ -269,8 +271,8 @@ def test_combined_features(model1, model2, latex_outputs):
 
 def test_single_model_as_list(model1):
     """Test that single model can be passed as list."""
-    result1 = table(model1)
-    result2 = table([model1])
+    result1 = tabularx(model1)
+    result2 = tabularx([model1])
 
     # Both should work and produce similar output (model names differ)
     assert r"\begin{table}" in result1
@@ -279,7 +281,7 @@ def test_single_model_as_list(model1):
 
 def test_intercept_renamed(model1):
     """Test that Intercept is shown with default label."""
-    result = table(model1)
+    result = tabularx(model1)
 
     assert "Intercept" in result
     # Should appear as "Intercept" in row label position
