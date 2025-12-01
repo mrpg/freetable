@@ -98,12 +98,14 @@ latex = tabularx(
     caption="Regression Results",
     label="tab:regression",
     digits=3,
-    rename={"x1": "Gender", "x2": "Age"},
+    rename={"x1[T.Male]": "Male", "x2": "Age"},
     stars=(0.1, 0.05, 0.01),  # Order doesn't matter - automatically sorted
 )
 
 print(latex)
 ```
+
+*Did you know?* You can replace `tabularx` by `tabularray`!
 
 ### Advanced example with all features
 
