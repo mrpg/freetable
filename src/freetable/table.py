@@ -15,7 +15,7 @@ class TableCell:
         self.star_str = star_str
 
 
-def table(
+def tabularx(
     models: Union[Any, List[Any]],
     model_names: Optional[List[str]] = None,
     digits: int = 3,
@@ -67,12 +67,12 @@ def table(
     Example:
         >>> import statsmodels.formula.api as smf
         >>> import pandas as pd
-        >>> from freetable import table
+        >>> from freetable import tabularx
         >>>
         >>> df = pd.DataFrame({'y': [1, 2, 3, 4], 'x': [2, 4, 6, 8]})
         >>> m1 = smf.ols('y ~ x', data=df).fit()
         >>> m2 = smf.ols('y ~ x + z', data=df).fit()
-        >>> latex = table(
+        >>> latex = tabularx(
         ...     [m1, m2],
         ...     caption="My Results",
         ...     rename={"x": "Predictor"},
@@ -306,7 +306,7 @@ def tabularray(
     significance stars, and model statistics using the tabularray package with
     booktabs and siunitx libraries.
 
-    Unlike the standard table() function which uses threeparttable and tabularx,
+    Unlike the standard tabularx() function which uses threeparttable and tabularx,
     this function uses tabularray's advanced features for more precise control
     over cell styling and spacing. The table content is built as a matrix first,
     allowing cell-specific styling in the tabularray preamble.

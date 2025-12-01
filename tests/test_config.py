@@ -5,7 +5,7 @@ import pytest
 import statsmodels.formula.api as smf
 
 import freetable
-from freetable import config, table
+from freetable import config, tabularx
 
 
 @pytest.fixture
@@ -60,7 +60,7 @@ def test_config_accessible_from_freetable():
 def test_config_modify_model_prefix(simple_model, reset_config):
     """Test modifying model_prefix config."""
     config.model_prefix = "M"
-    result = table(simple_model)
+    result = tabularx(simple_model)
 
     assert "M1" in result
     assert "Model 1" not in result
@@ -69,7 +69,7 @@ def test_config_modify_model_prefix(simple_model, reset_config):
 def test_config_modify_rsquared_label(simple_model, reset_config):
     """Test modifying rsquared_label config."""
     config.rsquared_label = "R-squared"
-    result = table(simple_model)
+    result = tabularx(simple_model)
 
     # Check that the custom label appears
     assert "R-squared &" in result
@@ -82,7 +82,7 @@ def test_config_modify_rsquared_label(simple_model, reset_config):
 def test_config_modify_adj_rsquared_label(simple_model, reset_config):
     """Test modifying adj_rsquared_label config."""
     config.adj_rsquared_label = "Adjusted R-squared"
-    result = table(simple_model)
+    result = tabularx(simple_model)
 
     assert "Adjusted R-squared &" in result
     assert r"Adj. $R^2$ &" not in result
@@ -91,7 +91,7 @@ def test_config_modify_adj_rsquared_label(simple_model, reset_config):
 def test_config_modify_nobs_label(simple_model, reset_config):
     """Test modifying nobs_label config."""
     config.nobs_label = "N"
-    result = table(simple_model)
+    result = tabularx(simple_model)
 
     assert "N &" in result
     assert "Observations" not in result
@@ -100,7 +100,7 @@ def test_config_modify_nobs_label(simple_model, reset_config):
 def test_config_modify_intercept_label(simple_model, reset_config):
     """Test modifying intercept_label config."""
     config.intercept_label = "Constant"
-    result = table(simple_model)
+    result = tabularx(simple_model)
 
     assert "Constant &" in result
     # (Intercept) should not appear as a row label
@@ -117,7 +117,7 @@ def test_config_modify_all_labels(simple_model, reset_config):
     config.nobs_label = "N"
     config.intercept_label = "Const"
 
-    result = table(simple_model)
+    result = tabularx(simple_model)
 
     assert "M1" in result
     assert "R2 &" in result
@@ -127,12 +127,12 @@ def test_config_modify_all_labels(simple_model, reset_config):
 
 
 def test_config_persists_across_multiple_calls(simple_model, reset_config):
-    """Test that config changes persist across multiple table() calls."""
+    """Test that config changes persist across multiple tabularx() calls."""
     config.model_prefix = "Model#"
     config.nobs_label = "Observations"
 
-    result1 = table(simple_model)
-    result2 = table(simple_model)
+    result1 = tabularx(simple_model)
+    result2 = tabularx(simple_model)
 
     assert "Model#1" in result1
     assert "Observations &" in result1
@@ -152,7 +152,7 @@ def test_config_multiple_models(simple_model, reset_config):
     model2 = smf.ols("y ~ x1 + x2", data=df).fit()
 
     config.model_prefix = "Specification "
-    result = table([simple_model, model2])
+    result = tabularx([simple_model, model2])
 
     assert "Specification 1" in result
     assert "Specification 2" in result
@@ -165,7 +165,7 @@ def test_config_with_latex_formatting(simple_model, reset_config):
     config.rsquared_label = r"$R^{2}$"
     config.intercept_label = r"$\alpha$"
 
-    result = table(simple_model)
+    result = tabularx(simple_model)
 
     assert r"$R^{2}$ &" in result
     assert r"$\alpha$ &" in result
@@ -174,7 +174,7 @@ def test_config_with_latex_formatting(simple_model, reset_config):
 def test_config_empty_model_prefix(simple_model, reset_config):
     """Test config with empty model prefix."""
     config.model_prefix = ""
-    result = table(simple_model)
+    result = tabularx(simple_model)
 
     # Should just have numbers without prefix
     assert " & {1} \\\\" in result

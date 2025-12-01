@@ -83,7 +83,7 @@ You can use models from either library interchangeably, or even mix them in the 
 ```python
 import pandas as pd
 import statsmodels.formula.api as smf
-from freetable import table
+from freetable import tabularx
 
 df = pd.read_csv("output.csv")
 
@@ -92,7 +92,7 @@ m1 = smf.ols("y ~ x1", data=df).fit()
 m2 = smf.ols("y ~ x1 + x2", data=df).fit()
 
 # Generate LaTeX table
-latex = table(
+latex = tabularx(
     [m1, m2],
     model_names=["Model 1", "Model 2"],
     caption="Regression Results",
@@ -110,7 +110,7 @@ print(latex)
 ```python
 import pandas as pd
 import statsmodels.formula.api as smf
-from freetable import table
+from freetable import tabularx
 
 df = pd.read_csv("data.csv")
 
@@ -123,7 +123,7 @@ m3 = smf.ols("outcome ~ treatment + control1 + control2", data=df).fit(
 )
 
 # Create comprehensive table
-latex = table(
+latex = tabularx(
     [m1, m2, m3],
     model_names=["Model 1", "Model 2", "Model 3"],
     caption="Treatment Effects on Outcomes",

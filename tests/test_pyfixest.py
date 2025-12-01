@@ -6,7 +6,7 @@ import pytest
 # Try to import pyfixest - skip tests if not available
 pyfixest = pytest.importorskip("pyfixest")
 
-from freetable import table
+from freetable import tabularx
 from freetable.adapter import PyFixestAdapter, adapt_model
 
 
@@ -71,7 +71,7 @@ def test_adapt_model_pyfixest(pf_model1):
 
 def test_basic_pyfixest_table(pf_model1):
     """Test basic table generation with a single pyfixest model."""
-    result = table(pf_model1)
+    result = tabularx(pf_model1)
 
     # Check structure
     assert r"\begin{table}[htbp]" in result
@@ -91,7 +91,7 @@ def test_basic_pyfixest_table(pf_model1):
 
 def test_multiple_pyfixest_models(pf_model1, pf_model2):
     """Test table with multiple pyfixest models."""
-    result = table([pf_model1, pf_model2])
+    result = tabularx([pf_model1, pf_model2])
 
     # Check both models appear
     assert "Model 1" in result
@@ -103,7 +103,7 @@ def test_multiple_pyfixest_models(pf_model1, pf_model2):
 
 def test_pyfixest_with_rename(pf_model1, pf_model2):
     """Test variable renaming with pyfixest models."""
-    result = table(
+    result = tabularx(
         [pf_model1, pf_model2],
         rename={"x1": "Treatment", "x2": "Control"},
     )
@@ -114,7 +114,7 @@ def test_pyfixest_with_rename(pf_model1, pf_model2):
 
 def test_pyfixest_with_extra_rows(pf_model1, pf_model2):
     """Test extra custom rows with pyfixest models."""
-    result = table(
+    result = tabularx(
         [pf_model1, pf_model2],
         extra_rows={"Outcome": ["Y", "Y"], "SE type": ["IID", "IID"]},
     )
@@ -125,7 +125,7 @@ def test_pyfixest_with_extra_rows(pf_model1, pf_model2):
 
 def test_pyfixest_with_custom_header(pf_model1, pf_model2):
     """Test custom grouped headers with pyfixest models."""
-    result = table(
+    result = tabularx(
         [pf_model1, pf_model2],
         custom_header=[("Treatment", 1), ("Control", 1)],
     )
@@ -137,7 +137,7 @@ def test_pyfixest_with_custom_header(pf_model1, pf_model2):
 
 def test_pyfixest_significance_stars(pf_model1):
     """Test that significance stars appear for significant coefficients."""
-    result = table(pf_model1)
+    result = tabularx(pf_model1)
 
     # The x1 coefficient should be highly significant (perfect correlation)
     # and should have stars in the output
@@ -147,7 +147,7 @@ def test_pyfixest_significance_stars(pf_model1):
 
 def test_pyfixest_custom_model_names(pf_model1, pf_model2):
     """Test custom model names with pyfixest."""
-    result = table(
+    result = tabularx(
         [pf_model1, pf_model2],
         model_names=["Baseline", "Full Model"],
     )
@@ -159,7 +159,7 @@ def test_pyfixest_custom_model_names(pf_model1, pf_model2):
 
 def test_pyfixest_all_features(pf_model1, pf_model2):
     """Test all features combined with pyfixest models."""
-    result = table(
+    result = tabularx(
         [pf_model1, pf_model2],
         model_names=["Model A", "Model B"],
         digits=2,
@@ -187,7 +187,7 @@ def test_pyfixest_all_features(pf_model1, pf_model2):
 
 def test_pyfixest_r_squared_values(pf_model1):
     """Test that R-squared values are correctly extracted from pyfixest models."""
-    result = table(pf_model1, digits=2)
+    result = tabularx(pf_model1, digits=2)
 
     # The model should have R² = 1.0 (perfect fit)
     assert "1.00" in result
@@ -195,7 +195,7 @@ def test_pyfixest_r_squared_values(pf_model1):
 
 def test_pyfixest_nobs(pf_model1):
     """Test that number of observations is correctly extracted."""
-    result = table(pf_model1)
+    result = tabularx(pf_model1)
 
     # We have 8 observations in our test data
     assert "{8}" in result
@@ -205,7 +205,7 @@ def test_pyfixest_with_fixed_effects(df):
     """Test pyfixest model with fixed effects."""
     # Create a model with fixed effects
     model = pyfixest.feols("y ~ x1 | group", data=df)
-    result = table(model)
+    result = tabularx(model)
 
     # Should still work and produce valid LaTeX
     assert r"\begin{table}" in result
@@ -231,7 +231,7 @@ def test_mixed_models_not_supported():
     pf_model = pyfixest.feols("y ~ x1", data=df)
 
     # Should work with both models in the same table
-    result = table([sm_model, pf_model], model_names=["Statsmodels", "pyfixest"])
+    result = tabularx([sm_model, pf_model], model_names=["Statsmodels", "pyfixest"])
 
     assert "Statsmodels" in result
     assert "pyfixest" in result

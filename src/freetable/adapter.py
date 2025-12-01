@@ -13,9 +13,9 @@ if TYPE_CHECKING:
 
 
 class RegressionResult(Protocol):
-    """Protocol defining the interface expected by the table() function.
+    """Protocol defining the interface expected by the tabularx() function.
 
-    This allows the table() function to work with any regression result object
+    This allows the tabularx() function to work with any regression result object
     that provides these attributes.
     """
 

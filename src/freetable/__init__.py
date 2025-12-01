@@ -9,8 +9,8 @@ Requirements:
 """
 
 from freetable.config import config
-from freetable.table import table, tabularray
+from freetable.table import tabularray, tabularx
 
 __version__ = "2.0.0"
 __author__ = "Max R. P. Grossmann"
-__all__ = ["table", "tabularray", "config"]
+__all__ = ["tabularx", "tabularray", "config"]

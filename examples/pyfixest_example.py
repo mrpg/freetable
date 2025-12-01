@@ -3,7 +3,7 @@
 import pandas as pd
 import pyfixest as pf
 
-from freetable import table
+from freetable import tabularx
 
 # Create sample data
 df = pd.DataFrame(
@@ -21,7 +21,7 @@ m2 = pf.feols("wage ~ education + experience", data=df)
 m3 = pf.feols("wage ~ education + experience | region", data=df)
 
 # Generate LaTeX table
-latex = table(
+latex = tabularx(
     [m1, m2, m3],
     model_names=["Model 1", "Model 2", "Fixed Effects"],
     caption="Wage Regression Results (pyfixest)",
