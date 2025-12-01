@@ -46,7 +46,7 @@ def test_config_default_values():
     """Test that config has correct default values."""
     assert config.model_prefix == "Model "
     assert config.rsquared_label == r"$R^2$"
-    assert config.adj_rsquared_label == r"Adj. $R^2$"
+    assert config.adj_rsquared_label == r"Adj.\\ $R^2$"
     assert config.nobs_label == "Observations"
     assert config.intercept_label == "Intercept"
 
@@ -73,7 +73,7 @@ def test_config_modify_rsquared_label(simple_model, reset_config):
 
     # Check that the custom label appears
     assert "R-squared &" in result
-    # Check that it's not the default format (but Adj. $R^2$ will still contain $R^2$)
+    # Check that it's not the default format (but Adj.\\ $R^2$ will still contain $R^2$)
     lines = result.split("\n")
     rsquared_line = [line for line in lines if line.strip().startswith("R-squared")]
     assert len(rsquared_line) > 0
@@ -85,7 +85,7 @@ def test_config_modify_adj_rsquared_label(simple_model, reset_config):
     result = tabularx(simple_model)
 
     assert "Adjusted R-squared &" in result
-    assert r"Adj. $R^2$ &" not in result
+    assert r"Adj.\\ $R^2$ &" not in result
 
 
 def test_config_modify_nobs_label(simple_model, reset_config):
@@ -188,6 +188,6 @@ def test_config_class_instantiation():
     new_config = Config()
     assert new_config.model_prefix == "Model "
     assert new_config.rsquared_label == r"$R^2$"
-    assert new_config.adj_rsquared_label == r"Adj. $R^2$"
+    assert new_config.adj_rsquared_label == r"Adj.\\ $R^2$"
     assert new_config.nobs_label == "Observations"
     assert new_config.intercept_label == "Intercept"

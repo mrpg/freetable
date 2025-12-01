@@ -20,7 +20,7 @@ class Config:
     def __init__(self) -> None:
         self.model_prefix = "Model "
         self.rsquared_label = r"$R^2$"
-        self.adj_rsquared_label = r"Adj. $R^2$"
+        self.adj_rsquared_label = r"Adj.\\ $R^2$"
         self.nobs_label = "Observations"
         self.intercept_label = "Intercept"
 
