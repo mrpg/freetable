@@ -233,7 +233,7 @@ def tabularx(
     # Define column format for tabularx with siunitx
     # X for first column, then S columns with custom width for each model
     num_models = len(models)
-    s_cols = f"*{{{num_models}}}{{S[table-format = 3.5, table-column-width = 0.175\\textwidth]}}"
+    s_cols = f"*{{{num_models}}}{{S[table-format = 3.5, table-column-width = 0.175\\linewidth]}}"
     col_format = f"@{{}} X {s_cols} @{{}}"
 
     # Build significance note based on sorted thresholds
@@ -249,10 +249,10 @@ def tabularx(
 
     # Build tabularx content
     if resize:
-        tabularx_open = rf"\resizebox{{\textwidth}}{{!}}{{%{chr(10)}\begin{{tabularx}}{{\textwidth}}{{{col_format}}}  % !"
+        tabularx_open = rf"\resizebox{{\linewidth}}{{!}}{{%{chr(10)}\begin{{tabularx}}{{\linewidth}}{{{col_format}}}  % !"
         tabularx_close = r"\end{tabularx}}"
     else:
-        tabularx_open = rf"\begin{{tabularx}}{{\textwidth}}{{{col_format}}}  % !"
+        tabularx_open = rf"\begin{{tabularx}}{{\linewidth}}{{{col_format}}}  % !"
         tabularx_close = r"\end{tabularx}"
 
     latex = rf"""\begin{{table}}[{placement}]

@@ -215,7 +215,7 @@ def test_resize_true(model1, latex_outputs):
     """Test resize=True."""
     result = collect_latex(latex_outputs, "Resize Table", tabularx(model1, resize=True))
 
-    assert r"\resizebox{\textwidth}{!}{%" in result
+    assert r"\resizebox{\linewidth}{!}{%" in result
     assert r"\end{tabularx}}" in result
 
 

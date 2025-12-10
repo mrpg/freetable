@@ -18,7 +18,7 @@
 \label{tab:regression}
 \sisetup{parse-numbers=false}
 \begin{threeparttable}
-\begin{tabularx}{\textwidth}{@{} X *{2}{S[table-format = 3.5, table-column-width = 0.175\textwidth]} @{}}  % !
+\begin{tabularx}{\linewidth}{@{} X *{2}{S[table-format = 3.5, table-column-width = 0.175\linewidth]} @{}}  % !
 \toprule
  & {Model 1} & {Model 2} \\
 \midrule
@@ -45,7 +45,7 @@ Observations & {100} & {100} \\
     \DeclareTblrTemplate{caption-sep}{default}{: \strut}
     \DeclareTblrTemplate{remark-sep}{default}{\strut}
     \SetTblrStyle{remark}{font = \footnotesize, halign = j, hang = 0pt, indent = 0pt}
-    \setlength{\customcolwidth}{0.175\textwidth}
+    \setlength{\customcolwidth}{0.175\linewidth}
     \begin{booktabs}[
         caption = {Regression Results},
         footsep = \belowbottomsep,
@@ -60,7 +60,7 @@ Observations & {100} & {100} \\
         cell{4}{2} = {appto = {^{*}}},
         cell{4}{3} = {appto = {^{**}}},
         cell{6}{3} = {appto = {^{***}}},
-        colspec = {X *{2}{S[table-format = 3.5, table-column-width = 0.175\textwidth]}},
+        colspec = {X *{2}{S[table-format = 3.5, table-column-width = 0.175\linewidth]}},
         column{1} = {leftsep = 0pt},
         column{Z} = {rightsep = 0pt},
         hborder{1} = {abovespace = \abovetopsep, belowspace = \belowrulesep},
@@ -70,7 +70,7 @@ Observations & {100} & {100} \\
         hline{2, 8} = \lightrulewidth,
         row{1-1} = {guard, valign = m},
         cell{10-10}{2-3} = {c},
-        width = \textwidth,
+        width = \linewidth,
     }
          & {Model 1} & {Model 2} \\
         {Intercept} & {94.481} & {-4.861} \\
@@ -90,7 +90,7 @@ Observations & {100} & {100} \\
 \label{tab:treatment}
 \sisetup{parse-numbers=false}
 \begin{threeparttable}
-\begin{tabularx}{\textwidth}{@{} X *{3}{S[table-format = 3.5, table-column-width = 0.175\textwidth]} @{}}  % !
+\begin{tabularx}{\linewidth}{@{} X *{3}{S[table-format = 3.5, table-column-width = 0.175\linewidth]} @{}}  % !
 \toprule
  & \multicolumn{2}{c @{}}{{Main Effects}} & {Full Model} \\  % !
 \cmidrule(lr){2-3} \cmidrule(l){4-4}
