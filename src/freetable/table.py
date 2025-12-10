@@ -6,15 +6,6 @@ from freetable.adapter import adapt_model
 from freetable.config import config
 
 
-class TableCell:
-    """Represents a single cell in the table matrix."""
-
-    def __init__(self, content: str, has_stars: bool = False, star_str: str = ""):
-        self.content = content
-        self.has_stars = has_stars
-        self.star_str = star_str
-
-
 def tabularx(
     models: Union[Any, List[Any]],
     model_names: Optional[List[str]] = None,
