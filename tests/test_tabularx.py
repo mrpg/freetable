@@ -93,6 +93,24 @@ def test_model_names(model1, model2):
     assert "Model 1" not in result
 
 
+def test_model_names_wrong_length(model1, model2):
+    """Test that model_names validates length."""
+    with pytest.raises(ValueError, match="model_names has 1 values but 2 models"):
+        tabularx([model1, model2], model_names=["Only one"])
+
+
+def test_empty_models():
+    """Test that an empty model list fails clearly."""
+    with pytest.raises(ValueError, match="at least one model"):
+        tabularx([])
+
+
+def test_negative_digits(model1):
+    """Test that digits validates range before formatting."""
+    with pytest.raises(ValueError, match="digits must be non-negative"):
+        tabularx(model1, digits=-1)
+
+
 def test_digits(model1):
     """Test digits parameter."""
     result_3 = tabularx(model1, digits=3)
@@ -193,6 +211,12 @@ def test_custom_header_wrong_span(model1, model2):
     """Test that custom_header validates span."""
     with pytest.raises(ValueError, match="spans sum to 3 but 2 models"):
         tabularx([model1, model2], custom_header=[("Wrong", 3)])
+
+
+def test_custom_header_non_positive_span(model1, model2):
+    """Test that custom_header validates positive spans."""
+    with pytest.raises(ValueError, match="spans must be positive"):
+        tabularx([model1, model2], custom_header=[("Bad", 0), ("OK", 2)])
 
 
 def test_placement(model1):

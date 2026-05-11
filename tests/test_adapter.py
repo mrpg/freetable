@@ -129,11 +129,13 @@ def test_interface_consistency(statsmodels_model, pyfixest_model):
         assert hasattr(pf_adapted, attr)
 
     # Both should return the same types for Series attributes
-    assert type(sm_adapted.params) == type(pf_adapted.params)
-    assert type(sm_adapted.bse) == type(pf_adapted.bse)
-    assert type(sm_adapted.pvalues) == type(pf_adapted.pvalues)
-    assert type(sm_adapted.rsquared) == type(pf_adapted.rsquared)
-    assert type(sm_adapted.rsquared_adj) == type(pf_adapted.rsquared_adj)
+    assert type(sm_adapted.params) is type(pf_adapted.params)
+    assert type(sm_adapted.bse) is type(pf_adapted.bse)
+    assert type(sm_adapted.pvalues) is type(pf_adapted.pvalues)
+    assert isinstance(sm_adapted.rsquared, (int, float))
+    assert isinstance(pf_adapted.rsquared, (int, float))
+    assert isinstance(sm_adapted.rsquared_adj, (int, float))
+    assert isinstance(pf_adapted.rsquared_adj, (int, float))
     # nobs can be int or float, both are numeric
     assert isinstance(sm_adapted.nobs, (int, float))
     assert isinstance(pf_adapted.nobs, (int, float))

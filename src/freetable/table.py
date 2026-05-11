@@ -99,8 +99,18 @@ def tabularx(
     # Adapt models to unified interface
     models = [adapt_model(m) for m in models]
 
+    if not models:
+        raise ValueError("at least one model must be provided")
+
     if model_names is None:
         model_names = [f"{config.model_prefix}{i+1}" for i in range(len(models))]
+    elif len(model_names) != len(models):
+        raise ValueError(
+            f"model_names has {len(model_names)} values but {len(models)} models provided"
+        )
+
+    if digits < 0:
+        raise ValueError("digits must be non-negative")
 
     if rename is None:
         rename = {}
@@ -127,6 +137,10 @@ def tabularx(
     # Build header rows
     if custom_header:
         # Validate custom header spans sum to number of models
+        invalid_spans = [span for _, span in custom_header if span < 1]
+        if invalid_spans:
+            raise ValueError("custom_header spans must be positive")
+
         total_span = sum(span for _, span in custom_header)
         if total_span != len(models):
             raise ValueError(

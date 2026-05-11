@@ -6,10 +6,7 @@ from different libraries (statsmodels, pyfixest, etc.).
 
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any, Protocol
-
-if TYPE_CHECKING:
-    import pandas as pd
+from typing import Any, Protocol, cast
 
 
 class RegressionResult(Protocol):
@@ -20,17 +17,17 @@ class RegressionResult(Protocol):
     """
 
     @property
-    def params(self) -> pd.Series:  # pragma: no cover
+    def params(self) -> Any:  # pragma: no cover
         """Coefficient estimates indexed by parameter name."""
         ...
 
     @property
-    def bse(self) -> pd.Series:  # pragma: no cover
+    def bse(self) -> Any:  # pragma: no cover
         """Standard errors indexed by parameter name."""
         ...
 
     @property
-    def pvalues(self) -> pd.Series:  # pragma: no cover
+    def pvalues(self) -> Any:  # pragma: no cover
         """P-values indexed by parameter name."""
         ...
 
@@ -65,34 +62,34 @@ class PyFixestAdapter:
         self._model = model
 
     @property
-    def params(self) -> pd.Series:
+    def params(self) -> Any:
         """Return coefficients as a pandas Series."""
         return self._model.coef()
 
     @property
-    def bse(self) -> pd.Series:
+    def bse(self) -> Any:
         """Return standard errors as a pandas Series."""
         return self._model.se()
 
     @property
-    def pvalues(self) -> pd.Series:
+    def pvalues(self) -> Any:
         """Return p-values as a pandas Series."""
         return self._model.pvalue()
 
     @property
     def rsquared(self) -> float:
         """Return R-squared value."""
-        return self._model._r2
+        return float(self._model._r2)
 
     @property
     def rsquared_adj(self) -> float:
         """Return adjusted R-squared value."""
-        return self._model._adj_r2
+        return float(self._model._adj_r2)
 
     @property
     def nobs(self) -> int:
         """Return number of observations."""
-        return self._model._N
+        return int(self._model._N)
 
 
 def adapt_model(model: Any) -> RegressionResult:
@@ -131,7 +128,7 @@ def adapt_model(model: Any) -> RegressionResult:
     # statsmodels models - check for the expected interface
     if hasattr(model, "params") and hasattr(model, "bse") and hasattr(model, "pvalues"):
         # Already has the right interface, no adaptation needed
-        return model
+        return cast(RegressionResult, model)
 
     # Unsupported model type
     raise TypeError(

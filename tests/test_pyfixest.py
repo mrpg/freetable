@@ -3,11 +3,11 @@
 import pandas as pd
 import pytest
 
-# Try to import pyfixest - skip tests if not available
-pyfixest = pytest.importorskip("pyfixest")
-
 from freetable import tabularx
 from freetable.adapter import PyFixestAdapter, adapt_model
+
+# Try to import pyfixest - skip tests if not available
+pyfixest = pytest.importorskip("pyfixest")
 
 
 @pytest.fixture
